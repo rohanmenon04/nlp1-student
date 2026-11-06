@@ -59,7 +59,7 @@ def run_system(encoder, arch):
     oof_preds = np.zeros(len(texts), dtype=int) # out of fold predictions, one per tweet
 
     for k, (train_idx, val_idx) in enumerate(folds):
-        # bigram vocab from train fold (no leakage from val)
+        # bigram vocab from train fold (otherwise there would be leakage from validation)
         bigram_vocab = build_bigram_vocab(texts[train_idx], bpe_tokenizer)
         X_tr = encode(encoder, texts[train_idx], bigram_vocab)
         X_val = encode(encoder, texts[val_idx], bigram_vocab)
@@ -71,7 +71,7 @@ def run_system(encoder, arch):
             preds, _ = fit_predict_neural(arch, csr_matrix(X_tr), y_tr, csr_matrix(X_val), seed=SEED)
 
         accs.append(accuracy_score(y_val, preds))
-        f1s.append(f1_score(y_val, preds, average="macro"))
+        f1s.append(f1_score(y_val, preds, average="macro")) #macro because of class imbalance in dataset.
         oof_preds[val_idx] = preds
         print(f" [{encoder}+{arch}] fold {k+1}/{N_FOLDS}: acc={accs[-1]:.4f} macro-F1={f1s[-1]:.4f}", flush=True)
 
@@ -95,4 +95,5 @@ def run_all():
     return results
 
 if __name__ == "__main__":
-    print(run_system("bow", "logistic"))
+    print("==============Running full CV over 9 systems==============")
+    results = run_all()
