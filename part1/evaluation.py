@@ -10,6 +10,9 @@ import os
 import pickle
 import itertools
 
+import matplotlib.pyplot as plt
+from part1.analysis import BenavoliCorrelatedT, plot_box_and_points
+
 import numpy as np
 import pandas as pd
 
@@ -30,6 +33,10 @@ CACHE = "part1/cv_results.pkl" # so if it crashes we dont lose finished systems.
 ENCODERS = ["indicator", "bow", "bigram"]
 ARCHS = ["logistic", "mlp", "deep_mlp"]
 
+
+### For ROPE 
+ROPE = 0.005 # +-0.5 F1 points
+FIG_DIR = "part1/figures"
 
 texts = np.array(pool_texts)
 
@@ -94,6 +101,79 @@ def run_all():
 
     return results
 
+def results_table(results):
+    rows = []
+    for (encoder, arch), r in results.items():
+        rows.append({
+            "encoder": encoder, "architecture": arch,
+            "acc_mean": r["acc"].mean(), "acc_std": r["acc"].std(ddof=1),
+            "f1_mean": r["f1"].mean(), "f1_std": r["f1"].std(ddof=1),
+        })
+    return pd.DataFrame(rows).sort_values("f1_mean", ascending=False).reset_index(drop=True)
+
+def fold_scores_df(results, metric="f1"):
+    """One per row (system,fold), same format as tutorials plot_box_and_points"""
+    rows =[]
+    for system, r in results.items():
+        for fold, score in enumerate(r[metric]):
+            rows.append({"model": name(system), metric: score, "run": 0, "fold": fold})
+    return pd.DataFrame(rows)
+
+def name(system):
+    return f"{system[0]}+{system[1]}"
+
+def compare(results, a, b, metric="f1", rope=ROPE):
+    """Bayesian correlated t-test between systems a and b on their per fold scores"""
+    post = BenavoliCorrelatedT(results[a][metric], results[b][metric], names=[name(a), name(b)])
+    p_a, p_tie, p_b = post.probs(rope)
+    print(f"A={name(a):<20} B={name(b):<20} P(A wins)={p_a:.3f} P(tie)={p_tie:.3f} "
+          f"P(B wins):{p_b:.3f} effect={post.effect_size:.2f}")
+    fig, _ = post.plot(rope)
+    fig.savefig(f"{FIG_DIR}/rope_{name(a)}_vs_{name(b)}.png", dpi=150, bbox_inches="tight")
+    plt.close(fig)
+
+def error_analysis(results, system, n_examples=8):
+    preds = results[system]["oof"]
+    print(f"\nConfusion matrix for {name(system)} (rows = true, columns = predicted)")
+    print(pd.crosstab(pd.Series([labels[i] for i in pool_labels], name="true"),
+                      pd.Series([labels[i] for i in preds], name="predicted")))
+
+    wrong = np.flatnonzero(preds != pool_labels)
+    print(f"\n{len(wrong)} / {len(texts)} missclassified. Random examples:")
+    for i in np.random.default_rng(0).choice(wrong, n_examples, replace=False):
+        print(f" true={labels[pool_labels[i]]:<9} predicted={labels[preds[i]]:<9} >>> {texts[i]}")
+
+    n_words = np.array([len(t.split()) for t in texts])
+    short = n_words <= np.median(n_words)
+    err = preds != pool_labels
+    print(f"\nError rate, short tweets: {err[short].mean():.3f}")
+    print(f"Error rate, long tweets:  {err[~short].mean():.3f}")
+
+
 if __name__ == "__main__":
-    print("==============Running full CV over 9 systems==============")
     results = run_all()
+    os.makedirs(FIG_DIR, exist_ok=True)
+
+    table = results_table(results)
+    print("\n=== Results (mean and std over 5 folds), sorted by macro-F1 ===")
+    print(table.round(4).to_string())
+    table.to_csv("part1/results_table.csv", index=False)
+
+    best = (table.loc[0, "encoder"], table.loc[0, "architecture"])
+
+    print(f"\n=== Best system vs the rest (macro-F1, ROPE = {ROPE}) ===")
+    for system in results:
+        if system != best:
+            compare(results, best, system)
+
+    print("\n=== Does the bigram representation help? (bow vs bigram, same architecture) ===")
+    for arch in ARCHS:
+        compare(results, ("bow", arch), ("bigram", arch))
+
+    print("\n=== Does the deep MLP help? (mlp vs deep_mlp, same encoder) ===")
+    for enc in ENCODERS:
+        compare(results, (enc, "mlp"), (enc, "deep_mlp"))
+
+    error_analysis(results, best)
+
+    plot_box_and_points(fold_scores_df(results, "f1"), metric="f1")   # opens a window; close it to finish
