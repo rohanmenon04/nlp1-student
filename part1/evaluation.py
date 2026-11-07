@@ -90,7 +90,7 @@ def run_all():
         with open(CACHE, "rb") as f:
             results = pickle.load(f)
 
-    for encoder, arch in itertools.product(ENCODERS, ARCHS):
+    for encoder, arch in itertools.product(ENCODERS, ARCHS): # itertools: nice clean way to avoid double nested for loop to achieve every combination of the two lists (ENCODERS and ARCHS)
         if (encoder, arch) in results:
             print(f"skipping {encoder}+{arch} (cached)")
             continue
