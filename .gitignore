@@ -1,1 +1,5 @@
 *.pycache
+
+__pycache__/
+part2/embeddings/
+part2/pool_results.pkl
