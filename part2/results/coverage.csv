@@ -1,0 +1,5 @@
+model,token_coverage,word_token_coverage,word_type_coverage,top_oov
+glove-wiki-gigaword-50,0.9803693258665698,0.9798779456408522,0.7191164928803677,.. sharknado <3 lmao ): y'all calibraska mtvstars bday 8:
+glove-twitter-50,0.9883420727415904,0.9872442334638738,0.8132393299895903,ps4 u2 calibraska y'all 7pm 6pm 1d 10am 9pm 2-0
+fasttext-wiki-news-subwords-300,0.9698629803619849,0.9685541450039171,0.6505235308625367,:) c'mon rousey ant-man yakub sheeran gifford aldean :d :(
+conceptnet-numberbatch-17-06-300,0.8161764284472531,0.9595584756419421,0.6073786746279065,". "" , ! ... ? : - & '"
