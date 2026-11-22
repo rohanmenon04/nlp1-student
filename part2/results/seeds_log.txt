@@ -1,0 +1,9 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+device: cpu
+=== pool twitter50 trainable-mean  seed 1
+  fold 1: f1=0.6377  (best epoch 2)
+  fold 2: f1=0.6152  (best epoch 2)
+  fold 3: f1=0.6206  (best epoch 2)
+  fold 4: f1=0.6201  (best epoch 2)
+  fold 5: f1=0.6247  (best epoch 2)
+=== pool twitter50 trainable-mean  seed 2
