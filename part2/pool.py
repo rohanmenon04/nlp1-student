@@ -146,3 +146,16 @@ if __name__ == "__main__":
     for k, r in results.items():
         print(f"{k[0]}+{k[1]:<16} f1 {r['f1'].mean():.4f} ± {r['f1'].std():.4f}")
 
+# %% Step 3: compare with part 1 on the same folds
+from part1.evaluation import compare, results_table
+
+with open("part1/cv_results.pkl", "rb") as f:
+    part1_results = pickle.load(f)
+all_results = {**part1_results, **results}
+
+print(results_table(all_results))
+
+best = ("twitter", "trainable-mean")
+compare(all_results, best, ("bow", "logistic"))
+compare(all_results, best, ("bigram", "logistic"))
+compare(all_results, best, ("wiki", "trainable-mean"))
