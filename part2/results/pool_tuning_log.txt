@@ -1,0 +1,101 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Generating train split:   0%|          | 0/45615 [00:00<?, ? examples/s]Generating train split: 100%|██████████| 45615/45615 [00:00<00:00, 1238129.36 examples/s]
+Generating test split:   0%|          | 0/12284 [00:00<?, ? examples/s]Generating test split: 100%|██████████| 12284/12284 [00:00<00:00, 1408535.78 examples/s]
+Generating validation split:   0%|          | 0/2000 [00:00<?, ? examples/s]Generating validation split: 100%|██████████| 2000/2000 [00:00<00:00, 683389.65 examples/s]
+device: cuda
+=== twitter+trainable-mean
+downloading glove-twitter-50
+  fold 1: acc=0.6755  f1=0.6364  (best epoch 2)
+  fold 2: acc=0.6617  f1=0.6287  (best epoch 2)
+  fold 3: acc=0.6577  f1=0.6174  (best epoch 2)
+  fold 4: acc=0.6692  f1=0.6352  (best epoch 3)
+  fold 5: acc=0.6587  f1=0.6299  (best epoch 2)
+=== twitter+trainable-mean-lr0.0003
+  fold 1: acc=0.6786  f1=0.6489  (best epoch 6)
+  fold 2: acc=0.6627  f1=0.6310  (best epoch 6)
+  fold 3: acc=0.6575  f1=0.6119  (best epoch 5)
+  fold 4: acc=0.6638  f1=0.6324  (best epoch 6)
+  fold 5: acc=0.6611  f1=0.6320  (best epoch 7)
+=== twitter+trainable-mean-lr0.003
+  fold 1: acc=0.6826  f1=0.6546  (best epoch 2)
+  fold 2: acc=0.6694  f1=0.6390  (best epoch 2)
+  fold 3: acc=0.6643  f1=0.6212  (best epoch 1)
+  fold 4: acc=0.6627  f1=0.6186  (best epoch 1)
+  fold 5: acc=0.6560  f1=0.6219  (best epoch 1)
+=== twitter+trainable-mean-wd0.01
+  fold 1: acc=0.6758  f1=0.6368  (best epoch 2)
+  fold 2: acc=0.6617  f1=0.6286  (best epoch 2)
+  fold 3: acc=0.6579  f1=0.6172  (best epoch 2)
+  fold 4: acc=0.6689  f1=0.6347  (best epoch 3)
+  fold 5: acc=0.6588  f1=0.6299  (best epoch 2)
+=== twitter+trainable-mean-drop0.2
+  fold 1: acc=0.6796  f1=0.6501  (best epoch 4)
+  fold 2: acc=0.6651  f1=0.6305  (best epoch 4)
+  fold 3: acc=0.6715  f1=0.6426  (best epoch 4)
+  fold 4: acc=0.6676  f1=0.6366  (best epoch 4)
+  fold 5: acc=0.6597  f1=0.6271  (best epoch 4)
+=== twitter+trainable-mean-drop0.5
+  fold 1: acc=0.6831  f1=0.6475  (best epoch 9)
+  fold 2: acc=0.6684  f1=0.6291  (best epoch 9)
+  fold 3: acc=0.6720  f1=0.6289  (best epoch 7)
+  fold 4: acc=0.6720  f1=0.6467  (best epoch 10)
+  fold 5: acc=0.6645  f1=0.6354  (best epoch 10)
+=== twitter+trainable-mean-h25
+  fold 1: acc=0.6821  f1=0.6483  (best epoch 3)
+  fold 2: acc=0.6618  f1=0.6205  (best epoch 2)
+  fold 3: acc=0.6643  f1=0.6246  (best epoch 2)
+  fold 4: acc=0.6641  f1=0.6261  (best epoch 2)
+  fold 5: acc=0.6630  f1=0.6342  (best epoch 3)
+=== twitter+trainable-mean-h100
+  fold 1: acc=0.6671  f1=0.6314  (best epoch 2)
+  fold 2: acc=0.6634  f1=0.6320  (best epoch 2)
+  fold 3: acc=0.6658  f1=0.6325  (best epoch 2)
+  fold 4: acc=0.6622  f1=0.6399  (best epoch 3)
+  fold 5: acc=0.6583  f1=0.6307  (best epoch 2)
+=== twitter25+trainable-mean
+downloading glove-twitter-25
+  fold 1: acc=0.6657  f1=0.6399  (best epoch 3)
+  fold 2: acc=0.6526  f1=0.6209  (best epoch 3)
+  fold 3: acc=0.6534  f1=0.6255  (best epoch 3)
+  fold 4: acc=0.6639  f1=0.6362  (best epoch 4)
+  fold 5: acc=0.6500  f1=0.6210  (best epoch 3)
+=== twitter100+trainable-mean
+downloading glove-twitter-100
+  fold 1: acc=0.6877  f1=0.6608  (best epoch 2)
+  fold 2: acc=0.6706  f1=0.6342  (best epoch 2)
+  fold 3: acc=0.6671  f1=0.6375  (best epoch 2)
+  fold 4: acc=0.6712  f1=0.6406  (best epoch 2)
+  fold 5: acc=0.6658  f1=0.6325  (best epoch 2)
+=== twitter200+trainable-mean
+downloading glove-twitter-200
+  fold 1: acc=0.6745  f1=0.6254  (best epoch 1)
+  fold 2: acc=0.6622  f1=0.6140  (best epoch 1)
+  fold 3: acc=0.6675  f1=0.6291  (best epoch 1)
+  fold 4: acc=0.6622  f1=0.6147  (best epoch 1)
+  fold 5: acc=0.6657  f1=0.6303  (best epoch 1)
+                         system  f1_mean  f1_std  acc_mean  best_epoch_mean
+      twitter100+trainable-mean   0.6411  0.0114    0.6725              2.0
+ twitter+trainable-mean-drop0.5   0.6375  0.0091    0.6720              9.0
+ twitter+trainable-mean-drop0.2   0.6374  0.0092    0.6687              4.0
+    twitter+trainable-mean-h100   0.6333  0.0037    0.6634              2.2
+twitter+trainable-mean-lr0.0003   0.6312  0.0131    0.6647              6.0
+ twitter+trainable-mean-lr0.003   0.6311  0.0155    0.6670              1.4
+     twitter+trainable-mean-h25   0.6307  0.0110    0.6671              2.4
+         twitter+trainable-mean   0.6295  0.0075    0.6646              2.2
+  twitter+trainable-mean-wd0.01   0.6294  0.0076    0.6646              2.2
+       twitter25+trainable-mean   0.6287  0.0088    0.6571              3.2
+      twitter200+trainable-mean   0.6227  0.0078    0.6664              1.0
+
+BASE f1 here: 0.6295   in pool_results.pkl: 0.6295
+
+=== BASE vs one change (macro-F1, ROPE 0.005) ===
+A=twitter+trainable-mean       B=twitter+trainable-mean-lr0.0003 P(A wins)=0.109 P(tie)=0.634 P(B wins)=0.257 effect=0.37
+A=twitter+trainable-mean       B=twitter+trainable-mean-lr0.003 P(A wins)=0.261 P(tie)=0.373 P(B wins)=0.366 effect=0.17
+A=twitter+trainable-mean       B=twitter+trainable-mean-wd0.01 P(A wins)=0.000 P(tie)=1.000 P(B wins)=0.000 effect=-0.32
+A=twitter+trainable-mean       B=twitter+trainable-mean-drop0.2 P(A wins)=0.085 P(tie)=0.279 P(B wins)=0.636 effect=1.02
+A=twitter+trainable-mean       B=twitter+trainable-mean-drop0.5 P(A wins)=0.009 P(tie)=0.197 P(B wins)=0.794 effect=2.43
+A=twitter+trainable-mean       B=twitter+trainable-mean-h25   P(A wins)=0.190 P(tie)=0.519 P(B wins)=0.292 effect=0.20
+A=twitter+trainable-mean       B=twitter+trainable-mean-h100  P(A wins)=0.074 P(tie)=0.515 P(B wins)=0.411 effect=0.77
+A=twitter+trainable-mean       B=twitter25+trainable-mean     P(A wins)=0.222 P(tie)=0.627 P(B wins)=0.151 effect=-0.17
+A=twitter+trainable-mean       B=twitter100+trainable-mean    P(A wins)=0.033 P(tie)=0.154 P(B wins)=0.813 effect=1.75
+A=twitter+trainable-mean       B=twitter200+trainable-mean    P(A wins)=0.579 P(tie)=0.300 P(B wins)=0.121 effect=-0.79
