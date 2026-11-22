@@ -3,4 +3,3 @@
 __pycache__/
 part2/embeddings/
 part2/pool_results.pkl
-part2/rnn_results.pkl
