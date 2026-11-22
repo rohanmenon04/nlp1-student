@@ -13,6 +13,8 @@ from part2.embeddings import load_for_tutorial, make_tokenizer
 
 SEED = 42
 torch.manual_seed(SEED)
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print(f"device: {DEVICE}", flush=True)
 
 # %% Step 2: the step 1 code as functions, run over all 5 folds and 8 settings
 import os
@@ -84,13 +86,14 @@ def fit_predict(fold, name, freeze, pooling, seed=SEED, lr=1e-3, weight_decay=1e
 
     encoder = PoolEncoder(torch.tensor(emb.vectors), pooling=pooling, padding_idx=pad_id, freeze_embeddings=freeze)
     model = clslib.SoftmaxRegressor(hidden_size1=hidden, hidden_size2=hidden, num_classes=3, encoder=encoder, dropout=dropout)
+    model = model.to(DEVICE)   # before the optimizer, so AdamW's state lives on the same device
     criterion = nn.NLLLoss()
     optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=weight_decay)
 
     best_loss, best_state, best_epoch, patience = float("inf"), None, 0, 0
     for epoch in range(20):
-        experiment.training_one_epoch(model, fit_dl, optimizer, criterion)
-        dev_loss = experiment.evaluate(model, dev_dl, criterion)["loss"]
+        experiment.training_one_epoch(model, fit_dl, optimizer, criterion, device=DEVICE)
+        dev_loss = experiment.evaluate(model, dev_dl, criterion, device=DEVICE)["loss"]
         if dev_loss < best_loss:
             best_loss, best_state, best_epoch, patience = dev_loss, copy.deepcopy(model.state_dict()), epoch + 1, 0
         else:
@@ -99,7 +102,7 @@ def fit_predict(fold, name, freeze, pooling, seed=SEED, lr=1e-3, weight_decay=1e
                 break
 
     model.load_state_dict(best_state)
-    preds = np.concatenate(experiment.evaluate(model, val_dl, criterion)["predictions"])
+    preds = np.concatenate(experiment.evaluate(model, val_dl, criterion, device=DEVICE)["predictions"])
     return preds, best_epoch
 
 
