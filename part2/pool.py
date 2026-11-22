@@ -57,7 +57,8 @@ def prepare(name):
     """Load one embedding model and turn every tweet into word ids. Done once per model, then reused."""
     if name not in _prepared:
         emb = load_for_tutorial(name)
-        tok = make_tokenizer(name, emb.vocab, keep_punct=False)
+        tok_name = "glove-twitter-50" if name.startswith("glove-twitter") else name
+        tok = make_tokenizer(tok_name, emb.vocab, keep_punct=False)
         ids = [tok.ids(t) for t in pool_texts]
         _prepared[name] = (emb, ids)
     return _prepared[name]
@@ -69,7 +70,7 @@ def make_loader(ids, idx, pad_id, shuffle):
                       collate_fn=lambda b: experiment.collate_labelled_texts(b, padding_value=pad_id))
 
 
-def fit_predict(fold, name, freeze, pooling, seed=SEED):
+def fit_predict(fold, name, freeze, pooling, seed=SEED, lr=1e-3, weight_decay=1e-4, dropout=0.0, hidden=50):
     """Train on one fold (with a 10% dev split for early stopping), return predictions for the held-out fold."""
     train_idx, val_idx = folds[fold]
     fit_idx, dev_idx = train_test_split(train_idx, test_size=0.1, stratify=pool_labels[train_idx], random_state=seed)
@@ -82,9 +83,9 @@ def fit_predict(fold, name, freeze, pooling, seed=SEED):
     val_dl = make_loader(ids, val_idx, pad_id, False)
 
     encoder = PoolEncoder(torch.tensor(emb.vectors), pooling=pooling, padding_idx=pad_id, freeze_embeddings=freeze)
-    model = clslib.SoftmaxRegressor(hidden_size1=50, hidden_size2=50, num_classes=3, encoder=encoder)
+    model = clslib.SoftmaxRegressor(hidden_size1=hidden, hidden_size2=hidden, num_classes=3, encoder=encoder, dropout=dropout)
     criterion = nn.NLLLoss()
-    optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1e-4)
+    optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=weight_decay)
 
     best_loss, best_state, best_epoch, patience = float("inf"), None, 0, 0
     for epoch in range(20):
@@ -102,18 +103,20 @@ def fit_predict(fold, name, freeze, pooling, seed=SEED):
     return preds, best_epoch
 
 
-def run_system(name, freeze, pooling):
-    """All 5 folds for one setting. Same output format as part 1's run_system."""
+def run_system(name, freeze, pooling, **settings):
+    """All 5 folds for one setting. Same output format as part 1's run_system, plus the best epochs.
+    **settings passes extra keyword arguments (lr=..., dropout=...) straight on to fit_predict."""
     oof = np.empty(len(pool_labels), dtype=int)  # out-of-fold predictions, filled in fold by fold
-    accs, f1s = [], []
+    accs, f1s, best_epochs = [], [], []
     for fold, (_, val_idx) in enumerate(folds):
-        preds, best_epoch = fit_predict(fold, name, freeze, pooling)
+        preds, best_epoch = fit_predict(fold, name, freeze, pooling, **settings)
         oof[val_idx] = preds
         y = pool_labels[val_idx]
         accs.append(accuracy_score(y, preds))
         f1s.append(f1_score(y, preds, average="macro"))
+        best_epochs.append(best_epoch)
         print(f"  fold {fold + 1}: acc={accs[-1]:.4f}  f1={f1s[-1]:.4f}  (best epoch {best_epoch})", flush=True)
-    return {"acc": np.array(accs), "f1": np.array(f1s), "oof": oof}
+    return {"acc": np.array(accs), "f1": np.array(f1s), "oof": oof, "best_epoch": np.array(best_epochs)}
 
 
 def key(name, freeze, pooling):
@@ -144,18 +147,18 @@ def run_all():
 if __name__ == "__main__":
     results = run_all()
     for k, r in results.items():
-        print(f"{k[0]}+{k[1]:<16} f1 {r['f1'].mean():.4f} ± {r['f1'].std():.4f}")
+        print(f"{k[0]}+{k[1]:<16} f1 {r['f1'].mean():.4f} ± {r['f1'].std(ddof=1):.4f}")
 
-# %% Step 3: compare with part 1 on the same folds
-from part1.evaluation import compare, results_table
+    # %% Step 3: compare with part 1 on the same folds
+    from part1.evaluation import compare, results_table
 
-with open("part1/cv_results.pkl", "rb") as f:
-    part1_results = pickle.load(f)
-all_results = {**part1_results, **results}
+    with open("part1/cv_results.pkl", "rb") as f:
+        part1_results = pickle.load(f)
+    all_results = {**part1_results, **results}
 
-print(results_table(all_results))
+    print(results_table(all_results))
 
-best = ("twitter", "trainable-mean")
-compare(all_results, best, ("bow", "logistic"))
-compare(all_results, best, ("bigram", "logistic"))
-compare(all_results, best, ("wiki", "trainable-mean"))
+    best = ("twitter", "trainable-mean")
+    compare(all_results, best, ("bow", "logistic"))
+    compare(all_results, best, ("bigram", "logistic"))
+    compare(all_results, best, ("wiki", "trainable-mean"))
