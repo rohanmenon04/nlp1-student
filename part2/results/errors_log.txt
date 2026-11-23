@@ -1,4 +1,5 @@
 device: cpu
+parsing glove-twitter-50
 feature summary (mean over all tweets):
 length           23.843
 unk_share         0.013
@@ -14,96 +15,96 @@ gold_negative     0.156
 gold_positive     0.392
 
 === Accuracy with / without each binary feature ===
-      feature  share  bigram+logistic | with  bigram+logistic | without  pool frozen | with  pool frozen | without  pool trainable | with  pool trainable | without  lstm frozen | with  lstm frozen | without  lstm trainable | with  lstm trainable | without
-     negation  0.192                   0.580                      0.676               0.521                  0.630                  0.578                     0.685               0.591                  0.692                  0.585                     0.699
-     contrast  0.098                   0.593                      0.664               0.545                  0.616                  0.584                     0.673               0.608                  0.680                  0.597                     0.686
-     emoticon  0.048                   0.740                      0.653               0.697                  0.605                  0.755                     0.660               0.758                  0.668                  0.758                     0.673
-     emphasis  0.429                   0.667                      0.650               0.625                  0.597                  0.675                     0.657               0.682                  0.665                  0.690                     0.668
-      hashtag  0.184                   0.663                      0.656               0.614                  0.608                  0.672                     0.663               0.681                  0.671                  0.685                     0.676
- lexicon_word  0.653                   0.648                      0.676               0.599                  0.628                  0.657                     0.679               0.666                  0.685                  0.669                     0.693
-mixed_lexicon  0.139                   0.603                      0.666               0.547                  0.619                  0.606                     0.674               0.623                  0.681                  0.625                     0.686
-gold_negative  0.156                   0.414                      0.702               0.332                  0.660                  0.443                     0.705               0.453                  0.713                  0.608                     0.690
-gold_positive  0.392                   0.678                      0.644               0.615                  0.606                  0.719                     0.630               0.680                  0.668                  0.649                     0.696
+      feature  share  bow+logistic | with  bow+logistic | without  pool frozen | with  pool frozen | without  pool trainable | with  pool trainable | without  lstm frozen | with  lstm frozen | without  lstm trainable | with  lstm trainable | without
+     negation  0.192                0.576                   0.674               0.521                  0.630                  0.578                     0.685               0.591                  0.692                  0.585                     0.699
+     contrast  0.098                0.591                   0.662               0.545                  0.616                  0.584                     0.673               0.608                  0.680                  0.597                     0.686
+     emoticon  0.048                0.744                   0.651               0.697                  0.605                  0.755                     0.660               0.758                  0.668                  0.758                     0.673
+     emphasis  0.429                0.668                   0.646               0.625                  0.597                  0.675                     0.657               0.682                  0.665                  0.690                     0.668
+      hashtag  0.184                0.665                   0.653               0.614                  0.608                  0.672                     0.663               0.681                  0.671                  0.685                     0.676
+ lexicon_word  0.653                0.645                   0.675               0.599                  0.628                  0.657                     0.679               0.666                  0.685                  0.669                     0.693
+mixed_lexicon  0.139                0.601                   0.664               0.547                  0.619                  0.606                     0.674               0.623                  0.681                  0.625                     0.686
+gold_negative  0.156                0.416                   0.700               0.332                  0.660                  0.443                     0.705               0.453                  0.713                  0.608                     0.690
+gold_positive  0.392                0.676                   0.642               0.615                  0.606                  0.719                     0.630               0.680                  0.668                  0.649                     0.696
 
-MCMC diagnostics: max r_hat 1.010, min ess_bulk 137
+MCMC diagnostics: max r_hat 1.021, min ess_bulk 81
 
 model-implied accuracy on the subset:
-  bigram+logistic  0.661
-  pool frozen      0.609
-  pool trainable   0.662
+  bow+logistic     0.654
+  pool frozen      0.608
+  pool trainable   0.663
   lstm frozen      0.672
   lstm trainable   0.675
 
 === Feature weights per system (logit per 1 sd of the feature) ===
-system         bigram+logistic  pool frozen  pool trainable  lstm frozen  lstm trainable
-feature                                                                                 
-contrast                 -0.04        -0.03           -0.04        -0.03           -0.05
-emoticon                  0.10         0.09            0.11         0.07            0.11
-emphasis                  0.02         0.03            0.02         0.01            0.02
-gold_negative            -0.48        -0.56           -0.35        -0.48           -0.17
-gold_positive            -0.14        -0.24            0.02        -0.20           -0.23
-hashtag                  -0.00         0.00            0.01         0.02            0.06
-length                   -0.01         0.05           -0.04        -0.04           -0.07
-lexicon_word              0.07         0.04            0.04         0.08            0.04
-mixed_lexicon            -0.08        -0.04           -0.07        -0.05           -0.06
-negation                 -0.08        -0.11           -0.11        -0.09           -0.19
-rare_share               -0.03        -0.02           -0.05        -0.02           -0.04
-unk_share                -0.01        -0.00            0.00        -0.02           -0.03
+system         bow+logistic  pool frozen  pool trainable  lstm frozen  lstm trainable
+feature                                                                              
+contrast              -0.03        -0.03           -0.04        -0.03           -0.05
+emoticon               0.11         0.09            0.11         0.07            0.11
+emphasis               0.04         0.03            0.02         0.01            0.02
+gold_negative         -0.48        -0.56           -0.35        -0.48           -0.17
+gold_positive         -0.12        -0.24            0.02        -0.20           -0.23
+hashtag                0.00         0.00            0.01         0.02            0.06
+length                -0.03         0.05           -0.03        -0.04           -0.07
+lexicon_word           0.05         0.04            0.03         0.08            0.04
+mixed_lexicon         -0.07        -0.04           -0.07        -0.05           -0.06
+negation              -0.07        -0.11           -0.11        -0.09           -0.19
+rare_share            -0.01        -0.02           -0.05        -0.02           -0.04
+unk_share             -0.00        -0.00            0.00        -0.02           -0.03
 
 === Weight differences B - A (94% interval, 3%-97% quantiles); interval excluding 0 is marked * ===
 
 lstm trainable  minus  pool trainable
-    length          -0.033  [-0.108, +0.040]  P(>0)=0.20
-    unk_share       -0.030  [-0.103, +0.038]  P(>0)=0.20
-    rare_share      +0.010  [-0.061, +0.082]  P(>0)=0.62
-  * negation        -0.082  [-0.144, -0.015]  P(>0)=0.01
-    contrast        -0.006  [-0.072, +0.059]  P(>0)=0.43
-    emoticon        +0.000  [-0.070, +0.067]  P(>0)=0.50
-    emphasis        -0.004  [-0.072, +0.062]  P(>0)=0.46
-    hashtag         +0.051  [-0.011, +0.109]  P(>0)=0.94
-    lexicon_word    +0.001  [-0.076, +0.077]  P(>0)=0.53
-    mixed_lexicon   +0.009  [-0.054, +0.073]  P(>0)=0.59
-  * gold_negative   +0.189  [+0.120, +0.256]  P(>0)=1.00
-  * gold_positive   -0.248  [-0.314, -0.173]  P(>0)=0.00
+    length          -0.037  [-0.110, +0.043]  P(>0)=0.18
+    unk_share       -0.032  [-0.106, +0.048]  P(>0)=0.21
+    rare_share      +0.009  [-0.063, +0.086]  P(>0)=0.58
+  * negation        -0.081  [-0.147, -0.011]  P(>0)=0.01
+    contrast        -0.006  [-0.069, +0.057]  P(>0)=0.43
+    emoticon        +0.002  [-0.073, +0.074]  P(>0)=0.52
+    emphasis        -0.005  [-0.071, +0.063]  P(>0)=0.44
+    hashtag         +0.051  [-0.010, +0.111]  P(>0)=0.94
+    lexicon_word    +0.004  [-0.068, +0.080]  P(>0)=0.52
+    mixed_lexicon   +0.009  [-0.058, +0.076]  P(>0)=0.59
+  * gold_negative   +0.187  [+0.121, +0.262]  P(>0)=1.00
+  * gold_positive   -0.249  [-0.319, -0.180]  P(>0)=0.00
 
 pool trainable  minus  pool frozen
-  * length          -0.085  [-0.152, -0.019]  P(>0)=0.01
-    unk_share       +0.005  [-0.068, +0.072]  P(>0)=0.54
-    rare_share      -0.031  [-0.100, +0.037]  P(>0)=0.21
-    negation        -0.002  [-0.068, +0.062]  P(>0)=0.48
-    contrast        -0.017  [-0.079, +0.043]  P(>0)=0.31
-    emoticon        +0.021  [-0.047, +0.087]  P(>0)=0.72
-    emphasis        -0.011  [-0.074, +0.056]  P(>0)=0.39
-    hashtag         +0.005  [-0.055, +0.065]  P(>0)=0.55
-    lexicon_word    -0.002  [-0.072, +0.066]  P(>0)=0.46
-    mixed_lexicon   -0.029  [-0.098, +0.038]  P(>0)=0.20
-  * gold_negative   +0.209  [+0.136, +0.280]  P(>0)=1.00
-  * gold_positive   +0.258  [+0.191, +0.330]  P(>0)=1.00
+  * length          -0.083  [-0.153, -0.015]  P(>0)=0.01
+    unk_share       +0.005  [-0.070, +0.077]  P(>0)=0.53
+    rare_share      -0.031  [-0.103, +0.039]  P(>0)=0.22
+    negation        -0.001  [-0.068, +0.064]  P(>0)=0.50
+    contrast        -0.017  [-0.081, +0.050]  P(>0)=0.30
+    emoticon        +0.021  [-0.049, +0.089]  P(>0)=0.73
+    emphasis        -0.009  [-0.076, +0.055]  P(>0)=0.41
+    hashtag         +0.005  [-0.059, +0.067]  P(>0)=0.56
+    lexicon_word    -0.005  [-0.076, +0.071]  P(>0)=0.44
+    mixed_lexicon   -0.028  [-0.094, +0.040]  P(>0)=0.20
+  * gold_negative   +0.210  [+0.143, +0.279]  P(>0)=1.00
+  * gold_positive   +0.259  [+0.188, +0.334]  P(>0)=1.00
 
 lstm trainable  minus  lstm frozen
-    length          -0.031  [-0.104, +0.038]  P(>0)=0.22
-    unk_share       -0.007  [-0.076, +0.068]  P(>0)=0.42
-    rare_share      -0.027  [-0.102, +0.040]  P(>0)=0.26
-  * negation        -0.100  [-0.171, -0.033]  P(>0)=0.00
-    contrast        -0.022  [-0.082, +0.044]  P(>0)=0.25
-    emoticon        +0.038  [-0.038, +0.111]  P(>0)=0.84
-    emphasis        +0.005  [-0.059, +0.072]  P(>0)=0.56
-    hashtag         +0.037  [-0.029, +0.106]  P(>0)=0.86
-    lexicon_word    -0.047  [-0.119, +0.023]  P(>0)=0.11
-    mixed_lexicon   -0.015  [-0.078, +0.049]  P(>0)=0.34
-  * gold_negative   +0.315  [+0.250, +0.378]  P(>0)=1.00
-    gold_positive   -0.031  [-0.102, +0.040]  P(>0)=0.20
+    length          -0.032  [-0.108, +0.033]  P(>0)=0.19
+    unk_share       -0.008  [-0.083, +0.068]  P(>0)=0.41
+    rare_share      -0.027  [-0.103, +0.044]  P(>0)=0.24
+  * negation        -0.099  [-0.167, -0.031]  P(>0)=0.00
+    contrast        -0.022  [-0.091, +0.042]  P(>0)=0.26
+    emoticon        +0.037  [-0.033, +0.108]  P(>0)=0.85
+    emphasis        +0.005  [-0.063, +0.071]  P(>0)=0.56
+    hashtag         +0.036  [-0.029, +0.106]  P(>0)=0.85
+    lexicon_word    -0.046  [-0.119, +0.023]  P(>0)=0.12
+    mixed_lexicon   -0.014  [-0.080, +0.050]  P(>0)=0.35
+  * gold_negative   +0.314  [+0.247, +0.379]  P(>0)=1.00
+    gold_positive   -0.032  [-0.101, +0.037]  P(>0)=0.20
 
-pool trainable  minus  bigram+logistic
-    length          -0.027  [-0.096, +0.044]  P(>0)=0.23
-    unk_share       +0.013  [-0.059, +0.084]  P(>0)=0.64
-    rare_share      -0.019  [-0.091, +0.050]  P(>0)=0.31
-    negation        -0.026  [-0.100, +0.041]  P(>0)=0.23
-    contrast        -0.001  [-0.061, +0.061]  P(>0)=0.50
-    emoticon        +0.012  [-0.055, +0.084]  P(>0)=0.62
-    emphasis        -0.000  [-0.067, +0.066]  P(>0)=0.50
-    hashtag         +0.012  [-0.051, +0.075]  P(>0)=0.65
-    lexicon_word    -0.034  [-0.106, +0.039]  P(>0)=0.19
-    mixed_lexicon   +0.010  [-0.058, +0.077]  P(>0)=0.59
-  * gold_negative   +0.125  [+0.052, +0.197]  P(>0)=1.00
-  * gold_positive   +0.155  [+0.086, +0.224]  P(>0)=1.00
+pool trainable  minus  bow+logistic
+    length          -0.002  [-0.071, +0.068]  P(>0)=0.47
+    unk_share       +0.004  [-0.073, +0.080]  P(>0)=0.53
+    rare_share      -0.042  [-0.118, +0.031]  P(>0)=0.14
+    negation        -0.038  [-0.110, +0.033]  P(>0)=0.15
+    contrast        -0.013  [-0.075, +0.052]  P(>0)=0.36
+    emoticon        +0.003  [-0.068, +0.072]  P(>0)=0.54
+    emphasis        -0.019  [-0.089, +0.050]  P(>0)=0.29
+    hashtag         +0.007  [-0.057, +0.072]  P(>0)=0.58
+    lexicon_word    -0.011  [-0.083, +0.064]  P(>0)=0.38
+    mixed_lexicon   -0.005  [-0.073, +0.057]  P(>0)=0.44
+  * gold_negative   +0.126  [+0.055, +0.196]  P(>0)=1.00
+  * gold_positive   +0.140  [+0.072, +0.214]  P(>0)=1.00

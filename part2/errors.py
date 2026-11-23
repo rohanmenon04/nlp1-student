@@ -39,7 +39,7 @@ def load_systems():
     with open("part2/rnn_results.pkl", "rb") as f:
         rn = pickle.load(f)["cv"]
     return {
-        "bigram+logistic": p1[("bigram", "logistic")]["oof"],
+        "bow+logistic": p1[("bow", "logistic")]["oof"],
         "pool frozen": pl[("twitter", "frozen-mean")]["oof"],
         "pool trainable": pl[("twitter", "trainable-mean")]["oof"],
         "lstm frozen": rn[rnn.key(rnn.BASE)]["oof"],
@@ -160,7 +160,7 @@ if __name__ == "__main__":
     pairs = [("pool trainable", "lstm trainable"),   # does word order help where we expect it to?
              ("pool frozen", "pool trainable"),      # what does fine-tuning fix?
              ("lstm frozen", "lstm trainable"),
-             ("bigram+logistic", "pool trainable")]  # sparse counts vs embeddings
+             ("bow+logistic", "pool trainable")]  # sparse counts vs embeddings
     dt = diff_table(post, pairs, list(feats.columns))
     dt.to_csv(f"{RESULTS_DIR}/errors_differences.csv", index=False)
     print("\n=== Weight differences B - A (94% interval, 3%-97% quantiles); interval excluding 0 is marked * ===")
